@@ -140,7 +140,8 @@ export const getCurrentSchedule = functions.https.onRequest(async (req: any, res
   // var beginningOfToday = new Date().setHours(0)
   const scheduleRef = db().collection('schedules')
     .where('user', '==', user)
-    .where('createDate', ">=", beginningOfToday);
+    .where('createDate', ">=", beginningOfToday)
+    .orderBy("createDate");
   const scheduleSnapshot = await scheduleRef.get();
 
   if (scheduleSnapshot.empty) {
@@ -190,7 +191,12 @@ export const getCurrentSchedule = functions.https.onRequest(async (req: any, res
 
 export const updateCurrentSchedule = functions.https.onRequest(async (req: any, res: any) => {
   let user = req.body.uid;
-  const scheduleRef = db().collection('schedules').where("createDate", ">=", new Date().setHours(0, 0, 0))./*where('user', '==', user).*/limit(1);
+  var today = new Date();
+  var beginningOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+  const scheduleRef = db().collection('schedules')
+    .where('user', '==', user)
+    .where('createDate', ">=", beginningOfToday)
+    .orderBy("createDate");
   const snapshot = await scheduleRef.get();
 
   if (snapshot.empty) {
