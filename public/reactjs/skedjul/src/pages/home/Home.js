@@ -10,9 +10,10 @@ export default function Home() {
   return ForceSignIn(
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <h1>Skedjul</h1>
+        {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          
         </p>
         <a
           className="App-link"
