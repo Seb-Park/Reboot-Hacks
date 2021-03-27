@@ -1,5 +1,6 @@
 var placeholderId = "9aU7nSLWOPa0c26Tm1d5dMIbyf32";
 var isInSession = false;
+var currentSubject = "Loading...";
 
 const navigateToPage = async (path) => {
     var xhr = new XMLHttpRequest();
@@ -33,13 +34,13 @@ const getNiceList = async () => {
     return response.json();
 }
 
-function getNiceListWithSave(){
-    getNiceList().then((result)=>{
+function getNiceListWithSave() {
+    getNiceList().then((result) => {
         chrome.storage.local.set({ goodSites: result }, function () {
             console.log('Good Sites is set to ' + result);
         });
-    }).catch(()=>{
-        chrome.storage.local.set({ goodSites: ['google.com','schoology.com'] }, function () {
+    }).catch(() => {
+        chrome.storage.local.set({ goodSites: ['google.com', 'schoology.com'] }, function () {
             console.log('Good Sites is set to google and schoology');
         });
     })
@@ -86,7 +87,12 @@ navigateToPage("pages/loading");
 checkSession().then((response) => {
     updateInSessionLocalVariable(response.result);
     if (response.result) {
-        navigateToPage("pages/page2");
+        getCurrentPeriod().then((periodRes) => {
+            currentSubject = periodRes.period.name;
+            navigateToPage("pages/page2");
+        }).catch(()=>{
+            navigateToPage("pages/home");
+        })
     }
     else {
         navigateToPage("pages/home");
@@ -155,7 +161,9 @@ const getCurrentPeriod = async () => {
             "Content-Type": "application/json"
         }
     });
-    return response.json();
+    resultToReturn = response.json()
+    console.log(resultToReturn)
+    return resultToReturn;
 }
 
 function exitSessionWithNavigation() {
@@ -190,8 +198,8 @@ function updateInSessionLocalVariable(val) {
 }
 
 function updateLocalVariable(key, val) {
-    chrome.storage.local.set({ [key]: val }, function() {
-       console.log(`${key} is set to ${val}`);
+    chrome.storage.local.set({ [key]: val }, function () {
+        console.log(`${key} is set to ${val}`);
     });
 }
 
