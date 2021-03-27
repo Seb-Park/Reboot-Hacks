@@ -33,7 +33,7 @@ var button2 = document.createElement("div");
 button2.className = "procrastination-button procrastination-button-2";
 button2.innerHTML = "Sorry!";
 button2.addEventListener("click", function(){
-    alert("button working!");
+    window.close();
 })
 
 buttonOptions.appendChild(button1);
