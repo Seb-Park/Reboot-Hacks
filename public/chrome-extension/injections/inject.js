@@ -27,7 +27,10 @@ buttonOptions.className = "procrastination-button-options";
 
 var button1 = document.createElement("div");
 button1.className = "procrastination-button procrastination-button-1";
-button1.innerHTML = "Yes, it is."
+button1.innerHTML = "Yes, it is.";
+button1.addEventListener("click", function(){
+    overlay.remove();
+})
 
 var button2 = document.createElement("div");
 button2.className = "procrastination-button procrastination-button-2";
