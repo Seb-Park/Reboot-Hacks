@@ -292,8 +292,8 @@ exports.getCurrentScheduleCallable = functions.https.onCall(async (data, context
   });
 });
 
-exports.getCurrentPeriod = functions.https.onCall(async (data, context) => {
-  const uid = context.auth?.uid!;
+export const getCurrentPeriod = functions.https.onRequest(async (req: any, res: any) => {
+  const uid = req.body.uid;
   // const today = new Date();
   // var beginningOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
   // .setHours(0, 0, 0, 0);
@@ -336,7 +336,7 @@ exports.getCurrentPeriod = functions.https.onCall(async (data, context) => {
     
     var maxPeriod = 0;
     for (let i = 0; i < periods.length; i++) {
-      if(data.startTimestamp>new Date()){
+      if(req.body.startTimestamp > new Date()){
         // maxPeriod = i;
         // break;
         return{
@@ -346,10 +346,10 @@ exports.getCurrentPeriod = functions.https.onCall(async (data, context) => {
       maxPeriod = i;
     }
 
-    return { period: periods[maxPeriod-1]};
+    return res.status(200).json({ period: periods[maxPeriod-1] });
   }).catch((error) => {
     console.log(error);
-    return ({ error: "Query Unsuccessful" });
+    return res.status(500).json({ error: "Query Unsuccessful" });
   });
 });
 
