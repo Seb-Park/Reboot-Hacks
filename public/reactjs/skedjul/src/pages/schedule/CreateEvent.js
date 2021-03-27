@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { createEvent } from '../../global_components/firebaseFuncs'
+import TimePicker from 'react-time-picker';
 
 export default class CreateEvent extends Component {
   handleClick = () => {
@@ -9,9 +10,11 @@ export default class CreateEvent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      duration: 0,
+      duration: '',
       name: '',
-      startTime: 0,
+      hours: '',
+      minutes: '',
+      time: ''
     };
 
     this.handleChange= this.handleChange.bind(this);
@@ -22,23 +25,36 @@ export default class CreateEvent extends Component {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
-
     this.setState({
       [name]: value
     });
   }
 
   handleSubmit(event) {
-    createEvent({
-      data: {
+    let h = parseInt(this.state.hours);
+    console.log(h);
+    let m = parseInt(this.state.minutes);
+    console.log(m);
+    let t = parseInt(this.state.time);
+    console.log(t);
 
-      }
-    })
+    if (h === 12 && t) h = 0;
+    console.log(h);
+    if (h !== 12 && !t) h += 12;
+    console.log(h);
+
+    createEvent({
+      name: this.state.name,
+      duration: this.state.duration,
+      startTime: h * 60 + m
+    });
     this.setState({
-      duration: 0,
+      duration: '',
       name: '',
-      startTime: 0,
-    })
+      hours: '',
+      minutes: '',
+      time: '',
+    });
 
     event.preventDefault();
   }
@@ -52,7 +68,12 @@ export default class CreateEvent extends Component {
         </label>
         <label>
           Time:
-          <input name="startTime" type="time" value={this.state.duration} onChange={this.handleChange}/>
+          <input name="hours" type="number" min="1" max="12" value={this.state.hours} onChange={this.handleChange}/>
+          <input name="minutes" type="number" min="0" max="60" value={this.state.minutes} onChange={this.handleChange}/>
+          <select name="time" value={this.state.time} onChange={this.handleChange}>
+            <option value='0'>AM</option>
+            <option value='1'>PM</option>
+          </select>
         </label>
         <label>
           Duration:
