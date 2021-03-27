@@ -16,8 +16,9 @@
           "<all_urls>"
         ],
         "js": [
-          "inject.js"
-        ]
+          "injections/inject.js"
+        ],
+        "css" : ["injections/inject.css","styles/variables.css"]
       }
     ],
     "web_accessible_resources": [
