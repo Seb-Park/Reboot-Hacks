@@ -17,6 +17,32 @@ const navigateToPage = async (path) => {
     xhr.send();
 }
 
+const getNiceList = async () => {
+    var url = 'https://us-central1-skedjul-3f13c.cloudfunctions.net/getNiceWebsites';
+    const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+            "uid": placeholderId
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    updateInSessionLocalVariable(false);
+    console.log(url);
+    return response.json();
+}
+
+function getNiceListWithSave(){
+    getNiceList.then((result)=>{
+        chrome.storage.local.set({ goodSites: result }, function () {
+            console.log('Good Sites is set to ' + val);
+        });
+    })
+}
+
+getNiceListWithSave();
+
 // function checkSession(){
 //     var url = 'https://us-central1-skedjul-3f13c.cloudfunctions.net/checkSession';
 //     fetch(url, {
