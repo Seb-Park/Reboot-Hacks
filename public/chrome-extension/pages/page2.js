@@ -6,3 +6,6 @@ exitSessionButton.addEventListener("click", function () {
 // console.log(result)
 document.getElementById('subject-title').innerHTML = currentSubject.toUpperCase();
 // alert(currentSubject)
+getCurrentPeriod().then((periodRes) => {
+    document.getElementById('subject-title').innerHTML = periodRes.period.name.toUpperCase();
+})
