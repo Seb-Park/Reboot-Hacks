@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ForceSignIn from '../../global_components/ForceSignIn'
 import { createEvent, getCurrentScheduleCallable } from '../../global_components/firebaseFuncs'
 import { Redirect, useHistory } from "react-router";
 import './schedule.css';
@@ -45,18 +46,16 @@ class Schedule extends Component {
             counter++;
         });
         events.push()
-        return (
+        return ForceSignIn(
             <div>
                 <div className="event-container">
                     {events}
                 </div>
-                <button class="create-event-button" onClick={this.toggleCreateEvent}>
+                <button className="create-event-button" onClick={this.toggleCreateEvent}>
                     New event + 
                 </button>
                 {this.state.createEventPopup ? <CreateEvent toggle={this.toggleCreateEvent} /> : null}
             </div>
-            
-
         );
     }
 }
