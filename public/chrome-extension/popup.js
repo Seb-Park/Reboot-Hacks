@@ -1,5 +1,6 @@
 var placeholderId = "9aU7nSLWOPa0c26Tm1d5dMIbyf32";
 var isInSession = false;
+var currentSubject = "Loading...";
 
 const navigateToPage = async (path) => {
     var xhr = new XMLHttpRequest();
@@ -16,6 +17,36 @@ const navigateToPage = async (path) => {
     xhr.responseType = "document";
     xhr.send();
 }
+
+const getNiceList = async () => {
+    var url = 'https://us-central1-skedjul-3f13c.cloudfunctions.net/getNiceWebsites';
+    const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+            "uid": placeholderId
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    updateInSessionLocalVariable(false);
+    console.log(url);
+    return response.json();
+}
+
+function getNiceListWithSave() {
+    getNiceList().then((result) => {
+        chrome.storage.local.set({ goodSites: result }, function () {
+            console.log('Good Sites is set to ' + result);
+        });
+    }).catch(() => {
+        chrome.storage.local.set({ goodSites: ['google.com', 'schoology.com'] }, function () {
+            console.log('Good Sites is set to google and schoology');
+        });
+    })
+}
+
+getNiceListWithSave();
 
 // function checkSession(){
 //     var url = 'https://us-central1-skedjul-3f13c.cloudfunctions.net/checkSession';
@@ -56,7 +87,12 @@ navigateToPage("pages/loading");
 checkSession().then((response) => {
     updateInSessionLocalVariable(response.result);
     if (response.result) {
-        navigateToPage("pages/page2");
+        getCurrentPeriod().then((periodRes) => {
+            currentSubject = periodRes.period.name;
+            navigateToPage("pages/page2");
+        }).catch(()=>{
+            navigateToPage("pages/home");
+        })
     }
     else {
         navigateToPage("pages/home");
@@ -114,6 +150,22 @@ const exitSession = async () => {
     return response.json();
 }
 
+const getCurrentPeriod = async () => {
+    var url = 'https://us-central1-skedjul-3f13c.cloudfunctions.net/getCurrentPeriod';
+    const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+            "uid": placeholderId
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    resultToReturn = response.json()
+    console.log(resultToReturn)
+    return resultToReturn;
+}
+
 function exitSessionWithNavigation() {
     navigateToPage("pages/loading");
     exitSession().then((result) => {
@@ -137,9 +189,17 @@ function exitSessionWithNavigation() {
 //     });
 // }
 
+function updateCurrentPeriodLocalVariable(val) {
+    updateLocalVariable('currentPeriod', val);
+}
+
 function updateInSessionLocalVariable(val) {
-    chrome.storage.local.set({ inSession: val }, function () {
-        console.log('In session is set to ' + val);
+    updateLocalVariable('inSession', val);
+}
+
+function updateLocalVariable(key, val) {
+    chrome.storage.local.set({ [key]: val }, function () {
+        console.log(`${key} is set to ${val}`);
     });
 }
 
@@ -170,3 +230,4 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
             storageChange.newValue);
     }
 });
+
