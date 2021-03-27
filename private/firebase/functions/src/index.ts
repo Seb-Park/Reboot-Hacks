@@ -134,7 +134,7 @@ exports.getSchedule = functions.https.onCall((data, context) => {
 export const getCurrentSchedule = functions.https.onRequest(async (req: any, res: any) => {
   let user = req.body.uid;
   let userDocRef = db().collection('users').doc(user);
-  const scheduleRef = db().collection('schedules').where("createDate", ">=", new Date().setHours(0, 0, 0)).where('user', '==', userDocRef).limit(1);
+  const scheduleRef = db().collection('schedules').where('user', '==', userDocRef).limit(1);
   const snapshot = await scheduleRef.get();
 
   if (snapshot.empty) {
