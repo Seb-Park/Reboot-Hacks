@@ -8,6 +8,7 @@ const enterSession = async () => {
         'Content-Type': 'application/json'
       }
     });
+    console.log(response.json())
     return response.json();
   }
 
