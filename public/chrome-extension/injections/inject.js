@@ -48,3 +48,12 @@ procrastinationContent.appendChild(buttonOptions)
 overlay.appendChild(procrastinationContent);
 
 document.body.appendChild(overlay);
+
+// chrome.webRequest.onBeforeRequest.addListener(
+// 	function(details) {
+// 		console.log("blocking:", details.url);
+// 		return {cancel: true };
+// 	},
+// 	{urls: ["*://*.youtube.com/"]},
+// 	["blocking"]
+// );
