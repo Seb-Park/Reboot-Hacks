@@ -15,7 +15,7 @@ export default class Event extends Component {
     if (minutes === 0) minutes = '00'
 
     this.startTime = `${hours}:${minutes} ${suffix}`;
-    
+
     let d_hours = parseInt(data.duration / 60);
     let d_minutes = data.duration - d_hours * 60;
 
@@ -51,12 +51,14 @@ export default class Event extends Component {
   }
   render() {
     return (
-      <div>
-        <p>Start time: {this.startTime}</p>
-        <p>Duration: {this.duration}</p>
-        <p>Name: {this.name}</p>
+      <div className="event-block">
+        <div className="event-left">
+          <p>{this.name} Homework</p>
+          <p>This is going to take you {this.duration}.</p>
+        </div>
+        <p className="start-time">{this.startTime}</p>
       </div>
-      
+
     );
   }
 }

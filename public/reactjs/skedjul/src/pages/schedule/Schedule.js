@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { createEvent, getCurrentScheduleCallable } from '../../global_components/firebaseFuncs'
 import { Redirect, useHistory } from "react-router";
+import './schedule.css';
 
 import Event from './Event'
 import CreateEvent from './CreateEvent'
@@ -46,11 +47,11 @@ class Schedule extends Component {
         events.push()
         return (
             <div>
-                <div>
+                <div className="event-container">
                     {events}
                 </div>
-                <button onClick={this.toggleCreateEvent}>
-                    Create event
+                <button class="create-event-button" onClick={this.toggleCreateEvent}>
+                    New event + 
                 </button>
                 {this.state.createEventPopup ? <CreateEvent toggle={this.toggleCreateEvent} /> : null}
             </div>
