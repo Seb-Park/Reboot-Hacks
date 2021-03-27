@@ -9,7 +9,8 @@ class Schedule extends Component {
     componentDidMount() {
         getSchedule()
             .then((result) => {
-                this.setState({ data: result.data })
+                this.setState({ data: result.data });
+                console.log(result.data)
             })
             .catch((error) => {
                 console.log(error)
@@ -18,7 +19,9 @@ class Schedule extends Component {
 
     render() {
         return (
-            <div></div>
+            <div>
+                <p>{this.state.data.duration}</p>
+            </div>
         );
     }
 }
