@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
-const cors = require('cors')({ origin: true });
+// const cors = require('cors')({ origin: true });
 
 
 admin.initializeApp()
@@ -123,13 +123,6 @@ exports.createEvent = functions.https.onCall(async (data, context) => {
   };
 
   db().collection('periods').doc().set(newEvent)
-});
-
-exports.getSchedule = functions.https.onCall((data, context) => {
-  cors(data, context, async () => {
-    const sampleEvent = (await db().collection('schedules').doc('samplePeriod').get())
-    return sampleEvent.data;
-  });
 });
 
 export const getCurrentSchedule = functions.https.onRequest(async (req: any, res: any) => {
@@ -278,31 +271,25 @@ exports.getCurrentScheduleCallable = functions.https.onCall(async (data, context
     currentSchedule: scheduleSnapshot.docs[0].id
   });
 
-  const responseJson = {
-    periods: {},
-    exists: true
-  }
-
   let periods: any[] = [];
 
   const periodsRef = db().collection('periods').where('schedule', '==', scheduleId);
 
-  try {
-    let value = await periodsRef.get();
+  return periodsRef.get().then((value) => {
     value.forEach((doc: any) => {
-      const withIds = doc.data();
-      withIds.id = doc.id;
-      periods.push(withIds);
-      responseJson.periods = periods;
-      return responseJson;
+      const data = doc.data();
+      periods.push({
+        duration: data.duration,
+        startTime: data.startTime,
+        name: data.name
+      });
     });
-  } catch (error) {
-    return ({
-      exists: false,
-      error: "Query Unsuccessful"
-    });
-  }
-  return null;
+    console.log(`${getFormattedDate()} :: Returned data ${JSON.stringify(periods)} for ${uid}`);
+    return { periods: periods };
+  }).catch((error) => {
+    console.log(error);
+    return ({ error: "Query Unsuccessful" });
+  });
 });
 
 

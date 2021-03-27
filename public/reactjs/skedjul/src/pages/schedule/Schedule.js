@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createEvent, getEvents } from '../../global_components/firebaseFuncs'
+import { createEvent, getCurrentScheduleCallable } from '../../global_components/firebaseFuncs'
 import { Redirect, useHistory } from "react-router";
 
 import Event from './Event'
@@ -18,14 +18,14 @@ class Schedule extends Component {
     };
 
     componentDidMount() {
-        getEvents()
+        getCurrentScheduleCallable()
             .then((result) => {
+                console.log(result.data)
                 this.setState({ 
                     data: {
-                        events: result.data.events
+                        events: result.periods
                     } 
                 });
-                console.log(result.data.events)
             })
             .catch((error) => {
                 console.log(error)

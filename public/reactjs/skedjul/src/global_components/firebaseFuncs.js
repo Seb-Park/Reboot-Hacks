@@ -5,5 +5,5 @@ firebase.initializeApp(firebaseConfig)
 
 
 export let getSchedule = firebase.functions().httpsCallable('getSchedule');
-export let getEvents = firebase.functions().httpsCallable('getEvents');
+export let getCurrentScheduleCallable = firebase.functions().httpsCallable('getCurrentScheduleCallable');
 export let createEvent = firebase.functions().httpsCallable('createEvent');
