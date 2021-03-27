@@ -13,7 +13,7 @@ export default function Home() {
     <div className="App">
       <header className="App-header">
         <div className="Home-Page-Main">
-          <h1 className="home-page-title">Skedjul</h1>
+          <h1 className="home-page-title">Focutivity</h1>
           <h2 className="home-page-subtitle">Hello{firebase.auth().currentUser ? ", " + firebase.auth().currentUser.displayName : ""}.</h2>
         <div className="home-enter-button" onClick={() => {
           history.push('/schedule')

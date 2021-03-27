@@ -1,0 +1,65 @@
+.sign-in-button{
+    cursor: pointer;
+    padding: 15px;
+    /* border-radius: 100vh; */
+    /* f  */
+    font-family: 'Roboto';
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: .5px;
+    color: gray;
+    background-color: white;
+    border-radius: 2px;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.39);
+    border: none;
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.sign-in-button:focus { outline: none; }
+
+.google-icon{
+    margin-right: 17px;
+
+}
+
+.sign-in-page{
+    text-align: center;
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(30deg, #5433ff, #20bdff, #92fe9d, #a6ffcb);
+    background-size: 700% 700%;
+
+    -webkit-animation: AnimationName 30s ease infinite;
+    -moz-animation: AnimationName 30s ease infinite;
+    animation: AnimationName 30s ease infinite;}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+.sign-in-welcome{
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    position: fixed;
+    color: white;
+    font-size: 70px;
+    font-family: 'Nunito';
+}
