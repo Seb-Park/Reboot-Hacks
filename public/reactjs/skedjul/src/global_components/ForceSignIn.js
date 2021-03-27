@@ -10,7 +10,7 @@ export default function ForceSignIn(Inner) {
         }}
       </IfFirebaseAuthedAnd>
       <IfFirebaseUnAuthed>
-        <Redirect push to='/signin' />
+        <Redirect to='/signin' />
       </IfFirebaseUnAuthed>
     </div>
   );
