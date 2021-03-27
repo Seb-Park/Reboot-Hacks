@@ -1,16 +1,31 @@
 import React, { Component } from 'react';
-import { getSchedule } from '../../global_components/firebaseFuncs'
+import { createEvent, getEvents } from '../../global_components/firebaseFuncs'
+import { Redirect, useHistory } from "react-router";
+
+import Event from './Event'
+import CreateEvent from './CreateEvent'
 class Schedule extends Component {
+
     constructor(props) {
         super(props);
-        this.state = { data: [] }
+        this.state = { data: [], createEventPopup: false }
     }
 
+    toggleCreateEvent = () => {
+        this.setState({
+            createEventPopup: !this.state.createEventPopup
+        });
+    };
+
     componentDidMount() {
-        getSchedule()
+        getEvents()
             .then((result) => {
-                this.setState({ data: result.data });
-                console.log(result.data)
+                this.setState({ 
+                    data: {
+                        events: result.data.events
+                    } 
+                });
+                console.log(result.data.events)
             })
             .catch((error) => {
                 console.log(error)
@@ -18,10 +33,24 @@ class Schedule extends Component {
     }
 
     render() {
+        if (this.state.data.events == null) return null;
+        const events = [];
+        this.state.data.events.forEach(event => {
+            events.push(<Event data={event}/>)
+        });
+        events.push()
         return (
             <div>
-                <p>{this.state.data.duration}</p>
+                <div>
+                    {events}
+                </div>
+                <button onClick={this.toggleCreateEvent}>
+                    Create event
+                </button>
+                {this.state.createEventPopup ? <CreateEvent toggle={this.toggleCreateEvent} /> : null}
             </div>
+            
+
         );
     }
 }
