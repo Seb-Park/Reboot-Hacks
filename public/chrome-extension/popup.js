@@ -144,6 +144,20 @@ const exitSession = async () => {
     return response.json();
 }
 
+const getCurrentPeriod = async () => {
+    var url = 'https://us-central1-skedjul-3f13c.cloudfunctions.net/getPeriod';
+    const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+            "uid": placeholderId
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    return response.json();
+}
+
 function exitSessionWithNavigation() {
     navigateToPage("pages/loading");
     exitSession().then((result) => {
@@ -167,9 +181,17 @@ function exitSessionWithNavigation() {
 //     });
 // }
 
+function updateCurrentPeriodLocalVariable(val) {
+    updateLocalVariable('currentPeriod', val);
+}
+
 function updateInSessionLocalVariable(val) {
-    chrome.storage.local.set({ inSession: val }, function () {
-        console.log('In session is set to ' + val);
+    updateLocalVariable('inSession', val);
+}
+
+function updateLocalVariable(key, val) {
+    chrome.storage.local.set({ [key]: val }, function() {
+       console.log(`${key} is set to ${val}`);
     });
 }
 
