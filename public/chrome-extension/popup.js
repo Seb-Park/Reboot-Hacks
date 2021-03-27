@@ -16,6 +16,10 @@ const navigateToPage = async (path) => {
     xhr.send();
 }
 
+//
+//ACTUALLY MAKE THIS CONTINGENT UPON WHETHER THE SESSION IS 
+//ENTERED OR NOT FROM "CHECK SESSION" ENDPOINT
+//
 // navigateToPage("pages/home");
 navigateToPage("pages/page2");
 
