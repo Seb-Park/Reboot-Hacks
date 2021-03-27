@@ -55,11 +55,30 @@ export const checkSession = functions.https.onRequest(async (req: any, res: any)
 export const enterSession = functions.https.onRequest(async (req: any, res: any) => {
   const userRef = admin.firestore().collection('users').doc(req.body.uid);
 
-  userRef.update({inSession: true});
+  userRef.update({inSession: true}).then(() => {
+    return res.status(200).json({
+      result: "success"
+    })
+  }).catch((errorMsg)=>{
+    return res.status(200).json({
+      result: "failure",
+      error: errorMsg
+    })
+  });
+
 })
 
 export const exitSession = functions.https.onRequest(async (req: any, res: any) => {
   const userRef = admin.firestore().collection('users').doc(req.body.uid);
 
-  userRef.update({inSession: false});
+  userRef.update({inSession: false}).then(() => {
+    return res.status(200).json({
+      result: "success"
+    })
+  }).catch((errorMsg)=>{
+    return res.status(200).json({
+      result: "failure",
+      error: errorMsg
+    })
+  });
 })
