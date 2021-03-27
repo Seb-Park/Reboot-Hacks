@@ -1,6 +1,9 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
+const cors = require('cors')({origin: true});
+
+
 admin.initializeApp()
 var db = admin.firestore
 
@@ -120,5 +123,7 @@ exports.createEvent = functions.https.onCall(async (data, context) => {
 });
 
 exports.getSchedule = functions.https.onCall((data, context) => {
-  
+  cors(data, context, () => {
+
+  });
 });
