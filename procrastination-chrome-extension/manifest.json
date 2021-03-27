@@ -1,0 +1,30 @@
+{
+    "manifest_version": 2,
+    "name": "Skedool",
+    "description": "Schedule your day out!",
+    "version": "0.0.1",
+    "icons": {
+      "128": "icons/icon_128.png"
+    },
+    "browser_action": {
+      "default_icon": "icons/icon.png",
+      "default_popup": "popup.html"
+    },
+    "content_scripts": [
+      {
+        "matches": [
+          "<all_urls>"
+        ],
+        "js": [
+          "inject.js"
+        ]
+      }
+    ],
+    "web_accessible_resources": [
+      "popup.js"
+    ],
+    "permissions": [
+      "webRequest",
+      "activeTab"
+    ]
+  }

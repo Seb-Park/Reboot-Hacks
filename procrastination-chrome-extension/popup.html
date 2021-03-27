@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sebastian Chrome Extension</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300;400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300;400;500&family=Poppins:wght@100;200;300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><!--https://www.freecodecamp.org/news/how-to-use-font-awesome-v5-7-2-with-html/-->
+</head>
+
+<body>
+    <div class="fade-in"></div>
+    <h1>Sebastian Park</h1>
+    <div class="content">
+        <a class="wide-button go-to-website-button" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank"> Go To
+            Website</a>
+        <a class="wide-button change-color-button" id="change-color-button">Change Color</a>
+        <a class="wide-button next-page-button" href="pages/page2.html">Next</a>
+    </div>
+    <script src="popup.js"></script>
+</body>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        margin: 0;
+        width: 380px;
+        min-height: 180px;
+        padding: 0px;
+        background-color: rgb(230, 230, 230);
+    }
+
+    h1 {
+        font-family: 'Poppins';
+        padding: 10px;
+        margin: 0;
+        background-color: black;
+        color: white;
+        font-weight: 500;
+        text-align: center;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        padding: 0 20px;
+        /* background-color: orange; */
+        text-align: center;
+        padding-bottom: 10px;
+    }
+
+    .wide-button {
+        font-family: 'Poppins';
+        font-size: 15px;
+        text-align: center;
+        border-radius: 100vh;
+        cursor: pointer;
+        padding: 10px 0px;
+        margin-top: 10px;
+        color: white;
+        transition: all ease-in-out 0.1s;
+    }
+
+    .wide-button:hover {
+        transform: scale(1.02, 1.02);
+    }
+
+    .next-page-button {
+        background: linear-gradient(to right, #00C9FF, #92FE9D) /*https://uigradients.com/#BackToEarth*/
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .change-color-button{
+        background: linear-gradient(to right, #7F00FF,#E94057, #F27121);/*https://uigradients.com/#Radar*/
+        background-size: 200% 200%;
+    }
+
+    .change-color-button:hover {
+        background-position: 100% 50%;
+        animation-fill-mode: forwards;
+        -webkit-animation-fill-mode: forwards;
+        -moz-animation-fill-mode: forwards;
+        -webkit-animation: GradientSwipe 1s ease;
+        -moz-animation: GradientSwipe 1s ease;
+        animation: GradientSwipe 1s ease;
+    }
+
+    .go-to-website-button {
+        background: linear-gradient(to right, #ee0979, #ff6a00);/*https://uigradients.com/#IbizaSunset*/
+    }
+
+    @-webkit-keyframes GradientSwipe {
+        from {
+            background-position: 0% 50%
+        }
+
+        to {
+            background-position: 100% 50%
+        }
+    }
+
+    @-moz-keyframes GradientSwipe {
+        0% {
+            background-position: 0% 50%
+        }
+
+        100% {
+            background-position: 100% 50%
+        }
+    }
+
+    @keyframes GradientSwipe {
+        0% {
+            background-position: 0% 50%
+        }
+
+        100% {
+            background-position: 100% 50%
+        }
+    }
+
+
+    .fade-in {
+        width: inherit;
+        height: 100%;
+        width: 380px;
+        position: absolute;
+        opacity: 0;
+        z-index: 10;
+        background-color: white;
+        pointer-events: none;
+        animation: FadeIn 1s ease-in-out;
+        -webkit-animation: FadeIn 1s ease-in-out;
+        /*We don't need regular but otherwise editor will get mad*/
+    }
+
+    @-webkit-keyframes FadeIn {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+    }
+
+    @keyframes FadeIn {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+    }
+</style>
+</html>
