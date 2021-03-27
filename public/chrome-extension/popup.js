@@ -12,6 +12,8 @@ const enterSession = async () => {
   }
 
 enterSessionButton = document.getElementById("enter-session-button");
-enterSessionButton.addEventListener("click", async function(){
-    enterSession
+enterSessionButton.addEventListener("click", function(){
+    enterSession().then((data)=> {
+        alert(data);
+    })
 });
