@@ -31,8 +31,20 @@
 }
 
 .procrastination-button{
-    padding: 10px;
+    padding: 10px 20px;
     margin: 10px;
+    font-size: 20px;
     border-radius: 100vh;
     cursor: pointer;
+    color: white;
 }
+
+.procrastination-button-1{
+    background: linear-gradient(to right, var(--positive-left), var(--positive-right));
+}
+
+.procrastination-button-2{
+    background: linear-gradient(to right, var(--negative-left), var(--negative-right));
+
+}
+

@@ -32,8 +32,9 @@ button1.innerHTML = "Yes, it is."
 var button2 = document.createElement("div");
 button2.className = "procrastination-button procrastination-button-2";
 button2.innerHTML = "Sorry!";
+
 button2.addEventListener("click", function(){
-    window.close();
+    window.replace("https://google.com");
 })
 
 buttonOptions.appendChild(button1);
