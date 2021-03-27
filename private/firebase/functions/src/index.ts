@@ -292,6 +292,66 @@ exports.getCurrentScheduleCallable = functions.https.onCall(async (data, context
   });
 });
 
+export const getCurrentPeriod = functions.https.onRequest(async (req: any, res: any) => {
+  const uid = req.body.uid;
+  // const today = new Date();
+  // var beginningOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+  // .setHours(0, 0, 0, 0);
+  // var beginningOfToday = new Date().setHours(0)
+  const userRef = db().collection('users').doc(uid)
+
+  const userSnap = await userRef.get();
+
+  if(!userSnap.exists){
+    return;
+  }
+
+  const scheduleRef = db().collection('schedules').doc(userSnap.get('currentSchedule'))
+  const scheduleSnapshot = await scheduleRef.get();
+
+  if (!scheduleSnapshot.exists) {
+    return ({
+      periods: [],
+      exists: false
+    })
+  }
+
+  const scheduleId = scheduleSnapshot.id;
+
+  let periods: any[] = [];
+
+  const periodsRef = db().collection('periods').where('schedule', '==', scheduleId);
+
+  return periodsRef.get().then((value) => {
+    value.forEach((doc: any) => {
+      const data = doc.data();
+      periods.push({
+        duration: data.duration,
+        startTime: data.startTime,
+        name: data.name,
+        startTimestamp: data.startTimestamp
+      });
+    });
+    console.log(`${getFormattedDate()} :: Returned data ${JSON.stringify(periods)} for ${uid}`);
+    
+    var maxPeriod = 0;
+    for (let i = 0; i < periods.length; i++) {
+      if(req.body.startTimestamp > new Date()){
+        // maxPeriod = i;
+        // break;
+        return{
+          period: periods[i-1]
+        }
+      }
+      maxPeriod = i;
+    }
+
+    return res.status(200).json({ period: periods[maxPeriod-1] });
+  }).catch((error) => {
+    console.log(error);
+    return res.status(500).json({ error: "Query Unsuccessful" });
+  });
+});
 
 
 // export const addNiceWebsite = 
