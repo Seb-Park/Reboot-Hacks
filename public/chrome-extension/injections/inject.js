@@ -27,7 +27,10 @@ buttonOptions.className = "procrastination-button-options";
 
 var button1 = document.createElement("div");
 button1.className = "procrastination-button procrastination-button-1";
-button1.innerHTML = "Yes, it is."
+button1.innerHTML = "Yes, it is.";
+button1.addEventListener("click", function(){
+    overlay.remove();
+})
 
 var button2 = document.createElement("div");
 button2.className = "procrastination-button procrastination-button-2";
@@ -45,3 +48,12 @@ procrastinationContent.appendChild(buttonOptions)
 overlay.appendChild(procrastinationContent);
 
 document.body.appendChild(overlay);
+
+// chrome.webRequest.onBeforeRequest.addListener(
+// 	function(details) {
+// 		console.log("blocking:", details.url);
+// 		return {cancel: true };
+// 	},
+// 	{urls: ["*://*.youtube.com/"]},
+// 	["blocking"]
+// );
