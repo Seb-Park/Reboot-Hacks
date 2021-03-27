@@ -24,6 +24,7 @@ exports.createUser = functions.auth.user().onCreate(async(user) => {
   const newUser = {
     email: user.email,
     createDate: admin.firestore.FieldValue.serverTimestamp(),
+    inSession: false,
     username: user.email?.substring(0, user.email?.indexOf("@")),
   }
 
