@@ -123,7 +123,8 @@ exports.createEvent = functions.https.onCall(async (data, context) => {
 });
 
 exports.getSchedule = functions.https.onCall((data, context) => {
-  cors(data, context, () => {
-
+  cors(data, context, async () => {
+    const sampleEvent = (await db().collection('schedules').doc('samplePeriod').get())
+    return sampleEvent.data;
   });
 });
