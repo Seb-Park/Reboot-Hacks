@@ -2,6 +2,7 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
 admin.initializeApp()
+var db = admin.firestore
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -25,12 +26,12 @@ function getFormattedDate() {
 exports.createUser = functions.auth.user().onCreate(async (user) => {
   const newUser = {
     email: user.email,
-    createDate: admin.firestore.FieldValue.serverTimestamp(),
+    createDate: db.FieldValue.serverTimestamp(),
     inSession: false,
     username: user.email?.substring(0, user.email?.indexOf("@")),
   }
 
-  const userRef = admin.firestore().collection("users");
+  const userRef = db().collection("users");
 
   await userRef.doc(String(user.uid)).set(newUser);
 
@@ -40,7 +41,7 @@ exports.createUser = functions.auth.user().onCreate(async (user) => {
 // chrome extension endpoints
 
 export const checkSession = functions.https.onRequest(async (req: any, res: any) => {
-  const userRef = admin.firestore().collection('users').doc(req.body.uid);
+  const userRef = db().collection('users').doc(req.body.uid);
 
   const doc = await userRef.get();
   if (!doc.exists) {
@@ -57,7 +58,7 @@ export const checkSession = functions.https.onRequest(async (req: any, res: any)
 })
 
 export const enterSession = functions.https.onRequest(async (req: any, res: any) => {
-  const userRef = admin.firestore().collection('users').doc(req.body.uid);
+  const userRef = db().collection('users').doc(req.body.uid);
 
   userRef.update({inSession: true}).then(() => {
     return res.status(200).json({
@@ -73,7 +74,7 @@ export const enterSession = functions.https.onRequest(async (req: any, res: any)
 })
 
 export const exitSession = functions.https.onRequest(async (req: any, res: any) => {
-  const userRef = admin.firestore().collection('users').doc(req.body.uid);
+  const userRef = db().collection('users').doc(req.body.uid);
 
   userRef.update({inSession: false}).then(() => {
     return res.status(200).json({
@@ -88,6 +89,36 @@ export const exitSession = functions.https.onRequest(async (req: any, res: any) 
 })
 
 // reactjs endpoints
-exports.createEvent = functions.https.onCall(async (req: any, res: any) => {
+exports.createSchedule = functions.https.onCall((data, context) => {
+  const uid = context.auth?.uid!
+
+  const userRef = db().collection('users').doc(uid);
+
+  const newSchedule = {
+    createDate: db.FieldValue.serverTimestamp(),
+    user: userRef,
+  };
+
+  db().collection('schedules').doc().set(newSchedule);
+});
+
+exports.createEvent = functions.https.onCall(async (data, context) => {
+  const uid = context.auth?.uid!
+
+  const userRef = db().collection('users').doc(uid);
+  const scheduleRef = (await userRef.get()).get("currentSchedule")
+
+  const newEvent = {
+    createDate: db.FieldValue.serverTimestamp(),
+    schedule: scheduleRef,
+    name: data.name,
+    startTime: data.startTime,
+    duration: data.duration,
+  };
+
+  db().collection('periods').doc().set(newEvent)
+});
+
+exports.getSchedule = functions.https.onCall((data, context) => {
   
-})
+});
