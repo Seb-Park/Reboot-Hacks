@@ -118,3 +118,7 @@ exports.createEvent = functions.https.onCall(async (data, context) => {
 
   db().collection('periods').doc().set(newEvent)
 });
+
+exports.getSchedule = functions.https.onCall((data, context) => {
+  
+});
