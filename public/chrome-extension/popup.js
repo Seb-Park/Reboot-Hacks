@@ -1,3 +1,5 @@
+var placeholderId = "9aU7nSLWOPa0c26Tm1d5dMIbyf32";
+
 const navigateToPage = async (path) => {
     var xhr = new XMLHttpRequest();
     xhr.onload = function() {
@@ -22,7 +24,7 @@ const enterSession = async () => {
     const response = await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
-            "uid": "9aU7nSLWOPa0c26Tm1d5dMIbyf32"
+            "uid": placeholderId
         }),
         headers: {
             "Content-Type": "application/json"
@@ -41,6 +43,21 @@ function enterSessionWithNavigation(){
     }).catch(()=>{
         navigateToPage("pages/home")
     })
+}
+
+const exitSession = async () => {
+    var url = 'https://us-central1-skedjul-3f13c.cloudfunctions.net/exitSession';
+    const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+            "uid": placeholderId
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    console.log(url);
+    return response.json();
 }
 
 function exitSessionWithNavigation(){

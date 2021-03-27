@@ -30,6 +30,7 @@
     "permissions": [
       "webRequest",
       "activeTab",
-      "https://us-central1-skedjul-3f13c.cloudfunctions.net/*"
+      "https://us-central1-skedjul-3f13c.cloudfunctions.net/*",
+      "storage"
     ]
   }
