@@ -1,0 +1,99 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 380px;
+    min-height: 180px;
+    padding: 0px;
+    background-color: var(--main-bg-color);
+}
+
+h1 {
+    font-family: 'Lexend';
+    padding: 10px;
+    margin: 0;
+    background: linear-gradient(to right, var(--main-left), var(--main-right));
+    color: white;
+    font-weight: 500;
+    text-align: center;
+}
+
+.content{
+    min-height: 180px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.wide-buttons {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+    /* background-color: orange; */
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.wide-button {
+    font-family: 'Poppins';
+    font-size: 15px;
+    text-align: center;
+    border-radius: 100vh;
+    cursor: pointer;
+    padding: 10px 0px;
+    margin-top: 10px;
+    color: white;
+    transition: all ease-in-out 0.1s;
+    background: linear-gradient(to right, var(--main-button-left),var(--main-button-mid), var(--main-button-right));/*https://uigradients.com/#Radar*/
+}
+
+.wide-button:hover {
+    transform: scale(1.02, 1.02);
+}
+
+.next-page-button {
+    /* background: linear-gradient(to right, #00C9FF, #92FE9D)  */
+    /*https://uigradients.com/#BackToEarth*/
+}
+
+a {
+    text-decoration: none;
+}
+
+.change-color-button{
+    background-size: 200% 200%;
+}
+
+.change-color-button:hover {
+    background-position: 100% 50%;
+    animation-fill-mode: forwards;
+    -webkit-animation-fill-mode: forwards;
+    -moz-animation-fill-mode: forwards;
+    -webkit-animation: GradientSwipe 1s ease;
+    -moz-animation: GradientSwipe 1s ease;
+    animation: GradientSwipe 1s ease;
+}
+
+.go-to-website-button {
+    /*background: linear-gradient(to right, #ee0979, #ff6a00);*/
+    /*https://uigradients.com/#IbizaSunset*/
+}
+
+.fade-in {
+    backdrop-filter: blur(200px);
+    width: inherit;
+    height: 100%;
+    width: 380px;
+    position: absolute;
+    opacity: 0;
+    z-index: 10;
+    background-color: white;
+    pointer-events: none;
+    animation: FadeIn 1s ease-in-out;
+    -webkit-animation: FadeIn 1s ease-in-out;
+    /*We don't need regular but otherwise editor will get mad*/
+}

@@ -1,0 +1,37 @@
+.procrastination-overlay{
+    position: fixed;
+    background-color: rgba(255, 255, 255, 0.555);
+    opacity: 1;
+    height: 100vh;
+    width: 100vw;
+    z-index: 10000;
+    top: 0%;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    text-align: center; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+    font-family: 'Nunito';
+}
+
+.procrastination-explanation{
+    font-style: italic;
+    font-size: 15px;
+}
+
+.oops-text{
+    font-size: 100px;
+}
+
+.procrastination-button-options{
+    display: flex; 
+    flex-direction: row; 
+    justify-content: center;
+}
+
+.procrastination-button{
+    padding: 10px;
+    margin: 10px;
+    border-radius: 100vh;
+}
