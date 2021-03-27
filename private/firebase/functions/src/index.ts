@@ -32,7 +32,7 @@ exports.createUser = functions.auth.user().onCreate(async (user) => {
     createDate: db.FieldValue.serverTimestamp(),
     inSession: false,
     username: user.email?.substring(0, user.email?.indexOf("@")),
-    currentSchedule:"",
+    currentSchedule: "",
   }
 
   const userRef = db().collection("users");
@@ -101,6 +101,7 @@ exports.createSchedule = functions.https.onCall((data, context) => {
   const newSchedule = {
     createDate: db.FieldValue.serverTimestamp(),
     user: userRef,
+    weblist: []
   };
 
   db().collection('schedules').doc().set(newSchedule);
@@ -132,32 +133,32 @@ exports.getSchedule = functions.https.onCall((data, context) => {
 
 export const getCurrentSchedule = functions.https.onRequest(async (req: any, res: any) => {
   let user = req.body.uid;
-  const scheduleRef = db().collection('schedules').where("event_time", ">=", new Date().setHours(0,0,0)).where('user', '==', user).limit(1);
+  const scheduleRef = db().collection('schedules').where("event_time", ">=", new Date().setHours(0, 0, 0)).where('user', '==', user).limit(1);
   const snapshot = await scheduleRef.get();
 
-  if (snapshot.empty){
+  if (snapshot.empty) {
     return res.status(200).json({
-      periods:[],
-      exists:false
+      periods: [],
+      exists: false
     })
   }
-  
+
   console.log("got past empty schedule");
 
   const userRef = db().collection('users').doc(user);
 
-  userRef.update({currentSchedule: scheduleRef});
+  userRef.update({ currentSchedule: scheduleRef });
 
-  const responseJson = { 
-    periods:{},
+  const responseJson = {
+    periods: {},
     exists: true
-   }
+  }
 
   let periods: any[] = [];
 
-  const periodsRef = db().collection('periods').where('schedule','==',scheduleRef);
+  const periodsRef = db().collection('periods').where('schedule', '==', scheduleRef);
 
-  periodsRef.get().then((value)=>{
+  periodsRef.get().then((value) => {
     value.forEach((doc: any) => {
       const withIds = doc.data();
       withIds.id = doc.id;
@@ -165,7 +166,7 @@ export const getCurrentSchedule = functions.https.onRequest(async (req: any, res
     })
     responseJson.periods = periods;
     res.status(200).json(responseJson);
-  }).catch(()=>{
+  }).catch(() => {
     res.status(200).json({
       exists: false,
       error: "Query Unsuccessful"
@@ -175,17 +176,52 @@ export const getCurrentSchedule = functions.https.onRequest(async (req: any, res
 
 export const updateCurrentSchedule = functions.https.onRequest(async (req: any, res: any) => {
   let user = req.body.uid;
-  const scheduleRef = db().collection('schedules').where("event_time", ">=", new Date().setHours(0,0,0)).where('user', '==', user).limit(1);
+  const scheduleRef = db().collection('schedules').where("event_time", ">=", new Date().setHours(0, 0, 0)).where('user', '==', user).limit(1);
   const snapshot = await scheduleRef.get();
 
-  if (snapshot.empty){
+  if (snapshot.empty) {
     return res.status(200).json({
-      periods:[],
-      exists:false
+      periods: [],
+      exists: false
     })
   }
-  
+
   const userRef = db().collection('users').doc(user);
 
-  userRef.update({currentSchedule: scheduleRef});
+  userRef.update({ currentSchedule: scheduleRef });
+});
+
+export const getNiceWebsites = functions.https.onRequest(async (req: any, res: any) => {
+  let userId = req.body.uid;
+  const userRef = db().collection('users').doc(userId)
+  const userSnapshot = await userRef.get();
+
+  if (userSnapshot.exists) {
+    const scheduleRef = db().collection('schedules').doc(userSnapshot.get('currentSchedule'));
+    const scheduleSnapshot = await scheduleRef.get();
+    if (scheduleSnapshot.exists) {
+      if (scheduleSnapshot.get("weblist") != null) {
+        return res.status(200).json({
+          nice_websites: scheduleSnapshot.get("weblist")
+        })
+      }
+      else {
+        return res.status(200).json({
+          nice_websites: [],
+          error: "looks like there's no weblist!"
+        });
+      }
+    } else {
+      return res.status(200).json({
+        nice_websites: [],
+        error: "looks like there's no schedule!"
+      });
+    }
+  }
+  else {
+    return res.status(200).json({
+      nice_websites: [],
+      error: "looks like there's no user!"
+    });
+  }
 });
