@@ -246,6 +246,67 @@ export const getNiceWebsites = functions.https.onRequest(async (req: any, res: a
   }
 });
 
+exports.getCurrentScheduleCallable = functions.https.onCall(async (data, context) => {
+  const uid = context.auth?.uid!;
+  const today = new Date();
+  var beginningOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+  // .setHours(0, 0, 0, 0);
+  // var beginningOfToday = new Date().setHours(0)
+  const scheduleRef = db().collection('schedules')
+    .where('user', '==', uid)
+    .where('createDate', ">=", beginningOfToday)
+    .orderBy("createDate");
+  const scheduleSnapshot = await scheduleRef.get();
+
+  if (scheduleSnapshot.empty) {
+    return ({
+      periods: [],
+      exists: false,
+      no_of_periods: scheduleSnapshot.size
+    })
+  }
+
+  console.log("got past empty schedule");
+
+  const userRef = db().collection('users').doc(uid);
+
+  console.log(scheduleRef)
+
+  const scheduleId = scheduleSnapshot.docs[0].id
+
+  userRef.update({
+    currentSchedule: scheduleSnapshot.docs[0].id
+  });
+
+  const responseJson = {
+    periods: {},
+    exists: true
+  }
+
+  let periods: any[] = [];
+
+  const periodsRef = db().collection('periods').where('schedule', '==', scheduleId);
+
+  try {
+    let value = await periodsRef.get();
+    value.forEach((doc: any) => {
+      const withIds = doc.data();
+      withIds.id = doc.id;
+      periods.push(withIds);
+      responseJson.periods = periods;
+      return responseJson;
+    });
+  } catch (error) {
+    return ({
+      exists: false,
+      error: "Query Unsuccessful"
+    });
+  }
+  return null;
+});
+
+
+
 // export const addNiceWebsite = 
 
 // export const getCurrentPeriod = functions.https.onRequest(async (req: any, res: any) => {
