@@ -34,9 +34,13 @@ const getNiceList = async () => {
 }
 
 function getNiceListWithSave(){
-    getNiceList.then((result)=>{
+    getNiceList().then((result)=>{
         chrome.storage.local.set({ goodSites: result }, function () {
-            console.log('Good Sites is set to ' + val);
+            console.log('Good Sites is set to ' + result);
+        });
+    }).catch(()=>{
+        chrome.storage.local.set({ goodSites: ['google.com','schoology.com'] }, function () {
+            console.log('Good Sites is set to google and schoology');
         });
     })
 }
