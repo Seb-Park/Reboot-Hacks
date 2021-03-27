@@ -20,6 +20,8 @@ function getFormattedDate() {
   return dateFormatted;
 }
 
+// user endpoints
+
 exports.createUser = functions.auth.user().onCreate(async (user) => {
   const newUser = {
     email: user.email,
@@ -34,6 +36,8 @@ exports.createUser = functions.auth.user().onCreate(async (user) => {
 
   console.log(`${getFormattedDate()} :: Created user ${newUser.username}`);
 })
+
+// chrome extension endpoints
 
 export const checkSession = functions.https.onRequest(async (req: any, res: any) => {
   const userRef = admin.firestore().collection('users').doc(req.body.uid);
@@ -81,4 +85,9 @@ export const exitSession = functions.https.onRequest(async (req: any, res: any) 
       error: errorMsg
     })
   });
+})
+
+// reactjs endpoints
+exports.createEvent = functions.https.onCall(async (req: any, res: any) => {
+  
 })
