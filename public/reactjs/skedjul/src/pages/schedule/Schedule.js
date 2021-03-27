@@ -23,7 +23,7 @@ class Schedule extends Component {
                 console.log(result.data)
                 this.setState({ 
                     data: {
-                        events: result.periods
+                        events: result.data.periods
                     } 
                 });
             })
@@ -33,10 +33,15 @@ class Schedule extends Component {
     }
 
     render() {
-        if (this.state.data.events == null) return null;
+        if (this.state.data.events == null) {
+            console.log("null")
+            return null;
+        }
         const events = [];
+        let counter = 0;
         this.state.data.events.forEach(event => {
-            events.push(<Event data={event}/>)
+            events.push(<Event data={event} key={counter}/>)
+            counter++;
         });
         events.push()
         return (
