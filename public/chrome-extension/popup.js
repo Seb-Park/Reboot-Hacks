@@ -145,7 +145,7 @@ const exitSession = async () => {
 }
 
 const getCurrentPeriod = async () => {
-    var url = 'https://us-central1-skedjul-3f13c.cloudfunctions.net/getPeriod';
+    var url = 'https://us-central1-skedjul-3f13c.cloudfunctions.net/getCurrentPeriod';
     const response = await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -222,3 +222,4 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
             storageChange.newValue);
     }
 });
+

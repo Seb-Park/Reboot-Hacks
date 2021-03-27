@@ -3,4 +3,11 @@ exitSessionButton.addEventListener("click", function () {
     exitSessionWithNavigation();
 });
 
-currentPeriod = document.getElementById('subject-title');
+
+window.onload = () => {
+    alert("kys")
+    getCurrentPeriod().then((result) => {
+        console.log(result)
+        document.getElementById('subject-title').innerHTML = result.period.name;
+    });
+}
