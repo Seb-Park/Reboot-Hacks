@@ -96,7 +96,7 @@ export const exitSession = functions.https.onRequest(async (req: any, res: any) 
 exports.createSchedule = functions.https.onCall((data, context) => {
   const uid = context.auth?.uid!
 
-  const userRef = db().collection('users').doc(uid);
+  // const userRef = db().collection('users').doc(uid);
 
   const newSchedule = {
     createDate: db.FieldValue.serverTimestamp(),
@@ -119,6 +119,7 @@ exports.createEvent = functions.https.onCall(async (data, context) => {
     name: data.name,
     startTime: data.startTime,
     duration: data.duration,
+    endTime: data.startTime + data.duration
   };
 
   db().collection('periods').doc().set(newEvent)
@@ -133,7 +134,8 @@ exports.getSchedule = functions.https.onCall((data, context) => {
 
 export const getCurrentSchedule = functions.https.onRequest(async (req: any, res: any) => {
   let user = req.body.uid;
-  const scheduleRef = db().collection('schedules').where('user', '==', user).limit(1);
+  let beginningOfToday = new Date().setHours(0,0,0,0);
+  const scheduleRef = db().collection('schedules')/*.where('user', '==', user)*/.where('createDate','>',beginningOfToday);
   const scheduleSnapshot = await scheduleRef.get();
 
   if (scheduleSnapshot.empty) {
@@ -182,7 +184,7 @@ export const getCurrentSchedule = functions.https.onRequest(async (req: any, res
 
 export const updateCurrentSchedule = functions.https.onRequest(async (req: any, res: any) => {
   let user = req.body.uid;
-  const scheduleRef = db().collection('schedules').where("event_time", ">=", new Date().setHours(0, 0, 0)).where('user', '==', user).limit(1);
+  const scheduleRef = db().collection('schedules').where("createDate", ">=", new Date().setHours(0, 0, 0))./*where('user', '==', user).*/limit(1);
   const snapshot = await scheduleRef.get();
 
   if (snapshot.empty) {
@@ -231,3 +233,52 @@ export const getNiceWebsites = functions.https.onRequest(async (req: any, res: a
     });
   }
 });
+
+// export const getCurrentPeriod = functions.https.onRequest(async (req: any, res: any) => {
+//   let scheduleUid = req.body.uid;
+//   const scheduleRef = db().collection('schedules').doc(scheduleUid);
+//   const scheduleSnapshot = await scheduleRef.get();
+
+//   if (scheduleSnapshot.exists) {
+//     return res.status(200).json({
+//       periods: [],
+//       exists: false
+//     })
+//   }
+
+//   console.log("got past empty schedule");
+
+//   const userRef = db().collection('users').doc(user);
+
+//   console.log(scheduleRef)
+
+//   const scheduleId = scheduleSnapshot.docs[0].id
+
+//   userRef.update({ 
+//     currentSchedule: scheduleSnapshot.docs[0].id
+//   });
+
+//   const responseJson = {
+//     periods: {},
+//     exists: true
+//   }
+
+//   let periods: any[] = [];
+
+//   const periodsRef = db().collection('periods').where('schedule', '==', scheduleId);
+
+//   periodsRef.get().then((value) => {
+//     value.forEach((doc: any) => {
+//       const withIds = doc.data();
+//       withIds.id = doc.id;
+//       periods.push(withIds);
+//     })
+//     responseJson.periods = periods;
+//     res.status(200).json(responseJson);
+//   }).catch(() => {
+//     res.status(200).json({
+//       exists: false,
+//       error: "Query Unsuccessful"
+//     })
+//   })
+// })
