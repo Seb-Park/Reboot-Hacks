@@ -100,7 +100,7 @@ exports.createSchedule = functions.https.onCall((data, context) => {
 
   const newSchedule = {
     createDate: db.FieldValue.serverTimestamp(),
-    user: userRef,
+    user: uid,
     weblist: []
   };
 
@@ -133,11 +133,10 @@ exports.getSchedule = functions.https.onCall((data, context) => {
 
 export const getCurrentSchedule = functions.https.onRequest(async (req: any, res: any) => {
   let user = req.body.uid;
-  let userDocRef = db().collection('users').doc(user);
-  const scheduleRef = db().collection('schedules').where('user', '==', userDocRef).limit(1);
-  const snapshot = await scheduleRef.get();
+  const scheduleRef = db().collection('schedules').where('user', '==', user).limit(1);
+  const scheduleSnapshot = await scheduleRef.get();
 
-  if (snapshot.empty) {
+  if (scheduleSnapshot.empty) {
     return res.status(200).json({
       periods: [],
       exists: false
@@ -148,7 +147,13 @@ export const getCurrentSchedule = functions.https.onRequest(async (req: any, res
 
   const userRef = db().collection('users').doc(user);
 
-  userRef.update({ currentSchedule: scheduleRef });
+  console.log(scheduleRef)
+
+  const scheduleId = scheduleSnapshot.docs[0].id
+
+  userRef.update({ 
+    currentSchedule: scheduleSnapshot.docs[0].id
+  });
 
   const responseJson = {
     periods: {},
@@ -157,7 +162,7 @@ export const getCurrentSchedule = functions.https.onRequest(async (req: any, res
 
   let periods: any[] = [];
 
-  const periodsRef = db().collection('periods').where('schedule', '==', scheduleRef);
+  const periodsRef = db().collection('periods').where('schedule', '==', scheduleId);
 
   periodsRef.get().then((value) => {
     value.forEach((doc: any) => {
