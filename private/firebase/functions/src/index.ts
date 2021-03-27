@@ -1,6 +1,9 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
+const cors = require('cors')({ origin: true });
+
+
 admin.initializeApp()
 var db = admin.firestore
 
@@ -29,6 +32,7 @@ exports.createUser = functions.auth.user().onCreate(async (user) => {
     createDate: db.FieldValue.serverTimestamp(),
     inSession: false,
     username: user.email?.substring(0, user.email?.indexOf("@")),
+    currentSchedule:"",
   }
 
   const userRef = db().collection("users");
@@ -60,11 +64,11 @@ export const checkSession = functions.https.onRequest(async (req: any, res: any)
 export const enterSession = functions.https.onRequest(async (req: any, res: any) => {
   const userRef = db().collection('users').doc(req.body.uid);
 
-  userRef.update({inSession: true}).then(() => {
+  userRef.update({ inSession: true }).then(() => {
     return res.status(200).json({
       result: "success"
     })
-  }).catch((errorMsg)=>{
+  }).catch((errorMsg) => {
     return res.status(200).json({
       result: "failure",
       error: errorMsg
@@ -76,11 +80,11 @@ export const enterSession = functions.https.onRequest(async (req: any, res: any)
 export const exitSession = functions.https.onRequest(async (req: any, res: any) => {
   const userRef = db().collection('users').doc(req.body.uid);
 
-  userRef.update({inSession: false}).then(() => {
+  userRef.update({ inSession: false }).then(() => {
     return res.status(200).json({
       result: "success"
     })
-  }).catch((errorMsg)=>{
+  }).catch((errorMsg) => {
     return res.status(200).json({
       result: "failure",
       error: errorMsg
@@ -119,10 +123,52 @@ exports.createEvent = functions.https.onCall(async (data, context) => {
   db().collection('periods').doc().set(newEvent)
 });
 
-exports.getSchedule = functions.https.onCall(async (data, context) => {
-  return {
-    data: {
-      duration: "fuck yo chicken strips"
-    }
+exports.getSchedule = functions.https.onCall((data, context) => {
+  cors(data, context, async () => {
+    const sampleEvent = (await db().collection('schedules').doc('samplePeriod').get())
+    return sampleEvent.data;
+  });
+});
+
+export const getCurrentSchedule = functions.https.onRequest(async (req: any, res: any) => {
+  let user = req.body.uid;
+  const scheduleRef = db().collection('schedules').where("event_time", ">=", new Date().setHours(0,0,0)).where('user', '==', user).limit(1);
+  const snapshot = await scheduleRef.get();
+
+  if (snapshot.empty){
+    return res.status(200).json({
+      periods:[],
+      exists:false
+    })
   }
+  
+  console.log("got past empty schedule");
+
+  const userRef = db().collection('users').doc(user);
+
+  userRef.update({currentSchedule: scheduleRef});
+
+  const responseJson = { 
+    periods:{},
+    exists: true
+   }
+
+  let periods: any[] = [];
+
+  const periodsRef = db().collection('periods').where('schedule','==',scheduleRef);
+
+  periodsRef.get().then((value)=>{
+    value.forEach((doc: any) => {
+      const withIds = doc.data();
+      withIds.id = doc.id;
+      periods.push(withIds);
+    })
+    responseJson.periods = periods;
+    res.status(200).json(responseJson);
+  }).catch(()=>{
+    res.status(200).json({
+      exists: false,
+      error: "Query Unsuccessful"
+    })
+  })
 });
