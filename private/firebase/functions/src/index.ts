@@ -172,3 +172,20 @@ export const getCurrentSchedule = functions.https.onRequest(async (req: any, res
     })
   })
 });
+
+export const updateCurrentSchedule = functions.https.onRequest(async (req: any, res: any) => {
+  let user = req.body.uid;
+  const scheduleRef = db().collection('schedules').where("event_time", ">=", new Date().setHours(0,0,0)).where('user', '==', user).limit(1);
+  const snapshot = await scheduleRef.get();
+
+  if (snapshot.empty){
+    return res.status(200).json({
+      periods:[],
+      exists:false
+    })
+  }
+  
+  const userRef = db().collection('users').doc(user);
+
+  userRef.update({currentSchedule: scheduleRef});
+});
