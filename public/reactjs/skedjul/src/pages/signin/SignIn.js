@@ -19,11 +19,16 @@ function SignInButton() {
       const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithPopup(googleAuthProvider).then((result) => {
         console.log(result);
-        history.push('/home');
+        setTimeout(() => {
+          console.log("Redirecting...");
+          history.replace('/home');
+        }, 10);
       }).catch((error) => { 
         console.log(error);
-        history.push('/signin/failed');
-      });
+        setTimeout(() => {
+          console.log("Redirecting...");
+          history.replace('/signin');
+        }, 10);      });
     }}>
       Sign in with Google
     </button>
