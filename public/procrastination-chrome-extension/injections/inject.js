@@ -34,7 +34,7 @@ button2.className = "procrastination-button procrastination-button-2";
 button2.innerHTML = "Sorry!";
 
 button2.addEventListener("click", function(){
-    window.replace("https://google.com");
+    window.location.href = "https://google.com";
 })
 
 buttonOptions.appendChild(button1);
