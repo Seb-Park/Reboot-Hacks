@@ -5,8 +5,8 @@
 html,
 body {
     margin: 0;
-    width: 380px;
-    min-height: 180px;
+    width: var(--window-width);
+    min-height: var(--window-min-height);
     padding: 0px;
     background-color: var(--main-bg-color);
 }
@@ -22,7 +22,7 @@ h1 {
 }
 
 .content{
-    min-height: 180px;
+    min-height: var(--window-min-height);
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -87,7 +87,7 @@ a {
     backdrop-filter: blur(200px);
     width: inherit;
     height: 100%;
-    width: 380px;
+    width: var(--window-width);
     position: absolute;
     opacity: 0;
     z-index: 10;
@@ -97,3 +97,46 @@ a {
     -webkit-animation: FadeIn 1s ease-in-out;
     /*We don't need regular but otherwise editor will get mad*/
 }
+
+/***PAGE 2 STYLES START HERE***/
+/***PAGE 2 STYLES START HERE***/
+/***PAGE 2 STYLES START HERE***/
+/***PAGE 2 STYLES START HERE***/
+/***PAGE 2 STYLES START HERE***/
+/***PAGE 2 STYLES START HERE***/
+/***PAGE 2 STYLES START HERE***/
+/***PAGE 2 STYLES START HERE***/
+/***PAGE 2 STYLES START HERE***/
+/***PAGE 2 STYLES START HERE***/
+
+.page-2-text-content{
+    padding: 10px;
+    text-align: center;
+}
+
+.subject-title{
+    font-family: 'Lexend';
+    font-size: 50px;
+    font-weight: bold;
+    color: var(--main-button-mid);
+}
+
+.p2-all-content{
+    height: 100%;
+    min-height: var(--window-min-height);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/***PAGE 2 STYLES END HERE***/
+/***PAGE 2 STYLES END HERE***/
+/***PAGE 2 STYLES END HERE***/
+/***PAGE 2 STYLES END HERE***/
+/***PAGE 2 STYLES END HERE***/
+/***PAGE 2 STYLES END HERE***/
+/***PAGE 2 STYLES END HERE***/
+/***PAGE 2 STYLES END HERE***/
+/***PAGE 2 STYLES END HERE***/
+/***PAGE 2 STYLES END HERE***/

@@ -9,4 +9,6 @@
     --negative-right: #EA384D;
     --positive-left: #78ffd6;
     --positive-right: #a8ff78;
+    --window-min-height: 180px;
+    --window-width: 380px;
 }
