@@ -1,29 +1,24 @@
 import firebase from "firebase/app";
 import "firebase/auth";
+import { useHistory } from "react-router";
 
 import ForceSignIn from "../../global_components/ForceSignIn"
 
-import logo from '../../logo.svg';
+import './Home.css';
 
 
 export default function Home() {
+  const history = useHistory();
   return ForceSignIn(
     <div className="App">
       <header className="App-header">
         <div className="Home-Page-Main">
-          <h1 class="home-page-title">Skedjul</h1>
-          {/* <img src={logo} className="App-logo" alt="logo" /> */}
-          <h2 class="home-page-subtitle">Hello{firebase.auth().currentUser ? ", " + firebase.auth().currentUser.displayName : ""}.</h2>
-          {/* <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-        </a> */}
-        <div className="home-enter-button">Enter Workspace</div>
-
+          <h1 className="home-page-title">Skedjul</h1>
+          <h2 className="home-page-subtitle">Hello{firebase.auth().currentUser ? ", " + firebase.auth().currentUser.displayName : ""}.</h2>
+        <div className="home-enter-button" onClick={() => {
+          history.push('/schedule')
+        }}>
+          Enter Workspace</div>
           <div className="home-sign-out-container">
             <div className="home-sign-out-button" onClick={() => {
               firebase.auth().signOut();
