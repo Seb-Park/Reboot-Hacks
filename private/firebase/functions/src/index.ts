@@ -101,7 +101,7 @@ exports.createSchedule = functions.https.onCall((data, context) => {
   const newSchedule = {
     createDate: db.FieldValue.serverTimestamp(),
     user: uid,
-    weblist: []
+    weblist: ['google.com','schoology.com']
   };
 
   db().collection('schedules').doc().set(newSchedule);
@@ -134,14 +134,20 @@ exports.getSchedule = functions.https.onCall((data, context) => {
 
 export const getCurrentSchedule = functions.https.onRequest(async (req: any, res: any) => {
   let user = req.body.uid;
-  let beginningOfToday = new Date().setHours(0,0,0,0);
-  const scheduleRef = db().collection('schedules')/*.where('user', '==', user)*/.where('createDate','>',beginningOfToday);
+  var today = new Date();
+  var beginningOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+  // .setHours(0, 0, 0, 0);
+  // var beginningOfToday = new Date().setHours(0)
+  const scheduleRef = db().collection('schedules')
+    .where('user', '==', user)
+    .where('createDate', ">=", beginningOfToday);
   const scheduleSnapshot = await scheduleRef.get();
 
   if (scheduleSnapshot.empty) {
     return res.status(200).json({
       periods: [],
-      exists: false
+      exists: false,
+      no_of_periods: scheduleSnapshot.size
     })
   }
 
@@ -153,7 +159,7 @@ export const getCurrentSchedule = functions.https.onRequest(async (req: any, res
 
   const scheduleId = scheduleSnapshot.docs[0].id
 
-  userRef.update({ 
+  userRef.update({
     currentSchedule: scheduleSnapshot.docs[0].id
   });
 
@@ -233,6 +239,8 @@ export const getNiceWebsites = functions.https.onRequest(async (req: any, res: a
     });
   }
 });
+
+// export const addNiceWebsite = 
 
 // export const getCurrentPeriod = functions.https.onRequest(async (req: any, res: any) => {
 //   let scheduleUid = req.body.uid;
