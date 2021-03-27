@@ -37,9 +37,6 @@ exports.createUser = functions.auth.user().onCreate(async (user) => {
 
 export const checkSession = functions.https.onRequest(async (req: any, res: any) => {
   const userRef = admin.firestore().collection('users').doc(req.body.uid);
-  // .where('tags', 'array-contains', req.body.q)
-  // .where("event_time", ">=", new Date())
-  // .orderBy("event_time");
 
   const doc = await userRef.get();
   if (!doc.exists) {
@@ -53,4 +50,16 @@ export const checkSession = functions.https.onRequest(async (req: any, res: any)
       error: "none"
     })
   }
+})
+
+export const enterSession = functions.https.onRequest(async (req: any, res: any) => {
+  const userRef = admin.firestore().collection('users').doc(req.body.uid);
+
+  userRef.update({inSession: true});
+})
+
+export const exitSession = functions.https.onRequest(async (req: any, res: any) => {
+  const userRef = admin.firestore().collection('users').doc(req.body.uid);
+
+  userRef.update({inSession: false});
 })
