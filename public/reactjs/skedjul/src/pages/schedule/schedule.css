@@ -50,3 +50,21 @@
 .event-block:hover{
     box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.39);
 }
+
+.create-event-input{
+    padding: 15px;
+    margin: 7px;
+    font-family: 'Roboto';
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: .5px;
+    border-radius: 20px;
+    width: fit-content;
+    background: white;
+    border: none;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.39);
+    outline: none;
+    cursor: pointer;
+    color: black;
+    transition: all ease-in-out .2s;
+}
