@@ -17,8 +17,8 @@ export default class CreateEvent extends Component {
       time: ''
     };
 
-    this.handleChange= this.handleChange.bind(this);
-    this.handleSubmit= this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
@@ -61,27 +61,33 @@ export default class CreateEvent extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          <input className="create-event-input" name="name" type="text" value={this.state.name} onChange={this.handleChange}/>
-        </label>
-        <label>
-          Time:
-          <input className="create-event-input" name="hours" type="number" min="1" max="12" value={this.state.hours} onChange={this.handleChange}/>
+      <div className="form-overlay">
+        <center>
+          <form className="create-form" onSubmit={this.handleSubmit}>
+            <label>
+              Name:
+          <input className="create-event-input" name="name" type="text" value={this.state.name} onChange={this.handleChange} />
+            </label>
+            <label>
+              Time:
+          <input className="create-event-input" name="hours" type="number" min="1" max="12" value={this.state.hours} onChange={this.handleChange} />
           :
-          <input className="create-event-input" name="minutes" type="number" min="0" max="60" value={this.state.minutes} onChange={this.handleChange}/>
-          <select className="create-event-input" name="time" value={this.state.time} onChange={this.handleChange}>
-            <option value='0'>AM</option>
-            <option value='1'>PM</option>
-          </select>
-        </label>
-        <label>
-          Duration:
-          <input className="create-event-input" name="duration" type="number" value={this.state.duration} onChange={this.handleChange}/>
-        </label>
-        <input className="create-event-input" type="submit" value="Submit" />
-      </form>
+          <input className="create-event-input" name="minutes" type="number" min="0" max="60" value={this.state.minutes} onChange={this.handleChange} />
+              <select className="create-event-input" name="time" value={this.state.time} onChange={this.handleChange}>
+                <option value='0'>AM</option>
+                <option value='1'>PM</option>
+              </select>
+            </label>
+            {/* <div> */}
+              <label>
+                Duration (min):
+          <input className="create-event-input" name="duration" type="number" value={this.state.duration} onChange={this.handleChange} />
+              </label>
+            {/* </div> */}
+            <input className="create-event-input" type="submit" value="Submit" />
+          </form>
+        </center>
+      </div>
     )
   }
 }

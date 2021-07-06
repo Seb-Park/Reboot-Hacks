@@ -52,7 +52,7 @@ class Schedule extends Component {
                     {events}
                 </div>
                 <button className="create-event-button" onClick={this.toggleCreateEvent}>
-                    New event + 
+                    + New event  
                 </button>
                 {this.state.createEventPopup ? <CreateEvent toggle={this.toggleCreateEvent} /> : null}
             </div>
